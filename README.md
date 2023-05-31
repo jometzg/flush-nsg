@@ -51,6 +51,7 @@ Authorization: Bearer {{authToken}}
 ### set these for later queries
 @resourceGroupName = your-nsg-resource-group
 @networkSecurityGroupName = your-nsg-name
+@location = westeurope
 
 ### get a specific NSG
 GET https://management.azure.com/subscriptions/{{subscriptionid}}/resourceGroups/{{resourceGroupName}}/providers/Microsoft.Network/networkSecurityGroups/{{networkSecurityGroupName}}?api-version=2022-11-01
@@ -66,7 +67,7 @@ Content-Type: application/json
 
 {
     "id": "/subscriptions/{{subscriptionid}}/resourceGroups/{{resourceGroupName}}/providers/Microsoft.Network/networkSecurityGroups/{{networkSecurityGroupName}}",
-    "location": "westeurope",
+    "location": "{{location}}",
     "properties": {
         "flushConnection": true
     }
