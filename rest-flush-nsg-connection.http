@@ -1,0 +1,48 @@
+### variables - you will need to change these
+@directoryid = your-tenant-id
+@clientid = your-service-principal-client-id
+@secret = your-service-principal-client-secret
+@subscriptionid = your-subscription-id
+
+### location of the NSG you want to flush
+@resourceGroupName = your-resource-group-name
+@networkSecurityGroupName = your-nsg-name
+@location = your-location
+
+### get a bearer token
+# @name login
+POST https://login.microsoftonline.com/{{directoryid}}/oauth2/v2.0/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id={{clientid}}
+&scope=https://management.core.windows.net/.default
+&client_secret={{secret}}
+&grant_type=client_credentials
+
+### grab the access token
+@authToken = {{login.response.body.access_token}}
+
+
+### get list of NSGs for this subscription
+GET https://management.azure.com/subscriptions/{{subscriptionid}}/providers/Microsoft.Network/networkSecurityGroups?api-version=2022-11-01
+Authorization: Bearer {{authToken}}
+
+
+
+### get a specific NSG
+GET https://management.azure.com/subscriptions/{{subscriptionid}}/resourceGroups/{{resourceGroupName}}/providers/Microsoft.Network/networkSecurityGroups/{{networkSecurityGroupName}}?api-version=2022-11-01
+Authorization: Bearer {{authToken}}
+
+
+### update a specic NSG to flush connections
+PUT https://management.azure.com/subscriptions/{{subscriptionid}}/resourceGroups/{{resourceGroupName}}/providers/Microsoft.Network/networkSecurityGroups/{{networkSecurityGroupName}}?api-version=2022-11-01
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "id": "/subscriptions/{{subscriptionid}}/resourceGroups/{{resourceGroupName}}/providers/Microsoft.Network/networkSecurityGroups/{{networkSecurityGroupName}}",
+    "location": "{{location}}",
+    "properties": {
+        "flushConnection": true
+    }
+}
