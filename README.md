@@ -1,4 +1,4 @@
-# Flush NSG
+# Flush Connections on a Network Security Group
 REST example of how to flush an Network Security Group (NSG) rules to allow for immediate re-evaluation
 
 ## Rationale
@@ -73,3 +73,4 @@ Content-Type: application/json
     }
 }
 ```
+The response from this should contain "provisioningState": "Succeeded".
