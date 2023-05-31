@@ -74,3 +74,7 @@ Content-Type: application/json
 }
 ```
 The response from this should contain "provisioningState": "Succeeded".
+
+
+### The REST client code
+This is contained in the file *rest-flush-nsg-connection*.
