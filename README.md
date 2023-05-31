@@ -21,6 +21,7 @@ This returns a clientId and secret. These can be used below
 @directoryid = your-tenant-id
 @clientid = your-service-principal-client-id
 @secret = your-service-principal-client-secret
+@subscriptionid = your-subscription-id
 
 ### get a bearer token
 # @name login
@@ -37,3 +38,37 @@ client_id={{clientid}}
 ```
 
 The variable *authToken* should contain the bearer token
+
+### List the Network Secrurity Groups in your subscription
+```
+### get list of NSGs for this subscription
+GET https://management.azure.com/subscriptions/{{subscriptionid}}/providers/Microsoft.Network/networkSecurityGroups?api-version=2022-11-01
+Authorization: Bearer {{authToken}}
+
+```
+### Get the details of a specific NSG
+```
+### set these for later queries
+@resourceGroupName = your-nsg-resource-group
+@networkSecurityGroupName = your-nsg-name
+
+### get a specific NSG
+GET https://management.azure.com/subscriptions/{{subscriptionid}}/resourceGroups/{{resourceGroupName}}/providers/Microsoft.Network/networkSecurityGroups/{{networkSecurityGroupName}}?api-version=2022-11-01
+Authorization: Bearer {{authToken}}
+```
+
+### Update a specific Network Security Group
+```
+### update a specic NSG to flush connections
+PUT https://management.azure.com/subscriptions/{{subscriptionid}}/resourceGroups/{{resourceGroupName}}/providers/Microsoft.Network/networkSecurityGroups/{{networkSecurityGroupName}}?api-version=2022-11-01
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "id": "/subscriptions/{{subscriptionid}}/resourceGroups/{{resourceGroupName}}/providers/Microsoft.Network/networkSecurityGroups/{{networkSecurityGroupName}}",
+    "location": "westeurope",
+    "properties": {
+        "flushConnection": true
+    }
+}
+```
